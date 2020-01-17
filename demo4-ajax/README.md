@@ -1,55 +1,45 @@
-# 使用iframe来实现上传, 局部刷新，不会刷新整个页面
+# ajax上传，无需刷新页面
 
-### 局部刷新
-
-页面内放一个隐藏的`iframe`，或者使用`js`动态创建，指定`form`表单的`target`属性值为iframe标签的`name`属性值，这样`form`表单的`shubmit`行为的跳转就会在`iframe`内完成，整体页面不会刷新。
-
-### 拿到接口数据
-
-为`iframe`添加load事件，得到`iframe`的页面内容，将结果转换为`JSON`对象，这样就拿到了接口的数据
-
-### html
+### HTML
 
 ```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>使用iframe 多个文件上传</title>
+    <title>ajax实现文件上传</title>
 </head>
 <body>
-<iframe
-    style="display:none;"
-    name="upload-iframe"
-    id="upload-iframe"
-    src=""
-    frameborder="0">
-</iframe>
-<!-- 使用iframe多文件上传 -->
-<form
-    target="upload-iframe"
-    method="post"
-    action="http://localhost:8300"
-    enctype="multipart/form-data">
-    <!-- 多文件上传 input要 添加 multiple 属性-->
-    请选择文件：(可多选)
-    <input type="file" name="demo3File" multiple>
+<div class="upload-wrapper">
+    <input id="demo4Ajax" type="file" multiple>
     <br>
-    <input type="submit">
-</form>
+    <button id="btn-submit">提交</button>
+</div>
 <script>
-    const iframe = document.getElementById('upload-iframe')
-    iframe.addEventListener('load', () => {
-        const res = iframe.contentWindow.document.body.innerText,
-            resObj = JSON.parse(res)
-        if(
-            resObj &&
-            resObj['fileUrl'] &&
-            resObj['fileUrl'].length
-        ) {
-            console.log(obj);
+    const btn = document.getElementById('btn-submit')
+    btn.addEventListener('click', handleUpload)
+
+    function handleUpload() {
+        const inputFile = document.getElementById('demo4Ajax'),
+            fileList = inputFile.files
+        if (!fileList.length) {
+            return alert('请选择文件')
         }
-    })
+        /* 使用FormData对象，将上传对象存入FormData对象内 */
+        const formData = new FormData()
+        for (let i = 0; i < fileList.length; i++) {
+            formData.append('demo4Ajax', fileList[i])
+        }
+        const xhr = new XMLHttpRequest()
+        xhr.open('POST', 'http://localhost:8400', true)
+        xhr.onreadystatechange = function() {
+            if(xhr.readyState === 4 && xhr.status === 200) {
+                const obj = JSON.parse(xhr.responseText);
+                console.log(obj);
+            }
+        }
+        xhr.send(formData)
+    }
 </script>
 </body>
 </html>
@@ -87,17 +77,17 @@ app.use(async ctx => {
     */
     try {
         const {files = {}} = ctx.request
-            /*
-            * 多个文件上传，
-            * demo3File就是一个数组，而不是一个对象
-            * */
-        let {demo3File = []} = files,
+        /*
+        * 多个文件上传，
+        * demo3File就是一个数组，而不是一个对象
+        * */
+        let {demo4Ajax = []} = files,
             result = []
         /* 这里要注意一下 如果只上传了一个文件, demo3File就不是一个数组，要兼容一下 */
-        if(!Array.isArray(demo3File)) {
-            demo3File = [demo3File]
+        if(!Array.isArray(demo4Ajax)) {
+            demo4Ajax = [demo4Ajax]
         }
-        !!demo3File && demo3File.forEach(item => {
+        !!demo4Ajax && demo4Ajax.forEach(item => {
             /*
              * path 路径
              * name 文件名称 例如 a.png

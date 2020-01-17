@@ -1,31 +1,3 @@
-# 多文件上传,上传成功会刷新掉整个页面,页面其他数据会丢失
-
-### HTML
-
-```html
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>多个文件上传</title>
-</head>
-<body>
-<!-- 多文件上传 -->
-<form
-    method="post"
-    action="http://localhost:8200"
-    enctype="multipart/form-data">
-    <!-- 多文件上传 input要 添加 multiple 属性-->
-    请选择文件：<input type="file" name="demo2File" multiple>
-    <input type="submit">
-</form>
-</body>
-</html>
-```
-
-### JS
-
-```javascript
 const path = require('path')
 const fs = require('fs')
 const Koa = require('koa')
@@ -57,15 +29,15 @@ app.use(async ctx => {
         const {files = {}} = ctx.request
         /*
         * 多个文件上传，
-        * demo2File就是一个数组，而不是一个对象
+        * demo3File就是一个数组，而不是一个对象
         * */
-        let {demo2File = []} = files,
+        let {demo4Ajax = []} = files,
             result = []
-        /* 这里要注意一下 如果只上传了一个文件, demo2File就不是一个数组，要兼容处理一下 */
-        if(!Array.isArray(demo2File)) {
-            demo2File = [demo2File]
+        /* 这里要注意一下 如果只上传了一个文件, demo3File就不是一个数组，要兼容一下 */
+        if(!Array.isArray(demo4Ajax)) {
+            demo4Ajax = [demo4Ajax]
         }
-        !!demo2File && demo2File.forEach(item => {
+        !!demo4Ajax && demo4Ajax.forEach(item => {
             /*
              * path 路径
              * name 文件名称 例如 a.png
@@ -94,4 +66,3 @@ app.listen(port, () => {
     console.log(`Servering is Running at http://localhost:${port}`);
 })
 
-```

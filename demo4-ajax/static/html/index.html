@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ajax实现文件上传</title>
+    <script src="../../server/index.js"></script>
+</head>
+<body>
+<div class="upload-wrapper">
+    <input id="demo4Ajax" type="file" multiple>
+    <br>
+    <button id="btn-submit">提交</button>
+</div>
+<script>
+    const btn = document.getElementById('btn-submit')
+    btn.addEventListener('click', handleUpload)
+
+    function handleUpload() {
+        const inputFile = document.getElementById('demo4Ajax'),
+            fileList = inputFile.files
+        if (!fileList.length) {
+            return alert('请选择文件')
+        }
+        /* 使用FormData对象，将上传对象存入FormData对象内 */
+        const formData = new FormData()
+        for (let i = 0; i < fileList.length; i++) {
+            formData.append('demo4Ajax', fileList[i])
+        }
+        const xhr = new XMLHttpRequest()
+        xhr.open('POST', 'http://localhost:8400', true)
+        xhr.onreadystatechange = function() {
+            if(xhr.readyState === 4 && xhr.status === 200) {
+                const obj = JSON.parse(xhr.responseText);
+                console.log(obj);
+            }
+        }
+        xhr.send(formData)
+    }
+</script>
+</body>
+</html>
