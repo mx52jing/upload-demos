@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>多个文件上传</title>
+</head>
+<body>
+<!-- 多文件上传 -->
+<form
+    method="post"
+    action="http://localhost:8200"
+    enctype="multipart/form-data">
+    <!-- 多文件上传 input要 添加 multiple 属性-->
+    请选择文件：<input type="file" name="demo2File" multiple>
+    <input type="submit">
+</form>
+</body>
+</html>

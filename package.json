@@ -1,0 +1,20 @@
+{
+  "name": "upload-about",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "start": "node scripts/start.js"
+  },
+  "devDependencies": {
+    "chalk": "^3.0.0",
+    "nodemon": "^2.0.2",
+    "shelljs": "^0.8.3",
+    "yargs": "^15.1.0"
+  },
+  "dependencies": {
+    "koa": "^2.11.0",
+    "koa-body": "^4.1.1",
+    "koa-static": "^5.0.0"
+  }
+}

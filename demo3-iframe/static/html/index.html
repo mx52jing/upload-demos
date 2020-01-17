@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>使用iframe 多个文件上传</title>
+</head>
+<body>
+<iframe
+    style="display:none;"
+    name="upload-iframe"
+    id="upload-iframe"
+    src=""
+    frameborder="0">
+</iframe>
+<!-- 使用iframe多文件上传 -->
+<form
+    target="upload-iframe"
+    method="post"
+    action="http://localhost:8300"
+    enctype="multipart/form-data">
+    <!-- 多文件上传 input要 添加 multiple 属性-->
+    请选择文件：(可多选)
+    <input type="file" name="demo3File" multiple>
+    <br>
+    <input type="submit">
+</form>
+<script>
+    const iframe = document.getElementById('upload-iframe')
+    iframe.addEventListener('load', () => {
+        const res = iframe.contentWindow.document.body.innerText,
+            resObj = JSON.parse(res)
+        if(
+            resObj &&
+            resObj['fileUrl'] &&
+            resObj['fileUrl'].length
+        ) {
+            console.log(obj);
+        }
+    })
+</script>
+</body>
+</html>
