@@ -29,11 +29,11 @@ app.use(async ctx => {
         const {files = {}} = ctx.request
         /*
         * 多个文件上传，
-        * demo3File就是一个数组，而不是一个对象
+        * demo4Ajax就是一个数组，而不是一个对象
         * */
         let {demo4Ajax = []} = files,
             result = []
-        /* 这里要注意一下 如果只上传了一个文件, demo3File就不是一个数组，要兼容一下 */
+        /* 这里要注意一下 如果只上传了一个文件, demo4Ajax就不是一个数组，要兼容一下 */
         if(!Array.isArray(demo4Ajax)) {
             demo4Ajax = [demo4Ajax]
         }
