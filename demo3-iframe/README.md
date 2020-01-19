@@ -8,7 +8,7 @@
 
 为`iframe`添加load事件，得到`iframe`的页面内容，将结果转换为`JSON`对象，这样就拿到了接口的数据
 
-### html
+### 客户端
 
 ```html
 <!DOCTYPE html>
@@ -55,7 +55,7 @@
 </html>
 ```
 
-### JS
+### 服务端
 
 ```javascript
 const path = require('path')

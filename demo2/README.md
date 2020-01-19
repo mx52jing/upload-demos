@@ -1,6 +1,6 @@
 # 多文件上传,上传成功会刷新掉整个页面,页面其他数据会丢失
 
-### HTML
+### 客户端
 
 ```html
 <!DOCTYPE html>
@@ -23,7 +23,7 @@
 </html>
 ```
 
-### JS
+### 服务端
 
 ```javascript
 const path = require('path')

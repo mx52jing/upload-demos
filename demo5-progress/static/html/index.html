@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>文件上传 显示上传进度</title>
+    <style>
+
+    </style>
+</head>
+<body>
+<div class="upload-wrapper">
+    <input id="demo5Progress" type="file" multiple>
+    <br>
+    <div class="upload-progress">
+        上传进度：
+        <div class="progress-status"></div>
+    </div>
+    <button id="btn-submit">提交</button>
+</div>
+<script>
+    const btn = document.getElementById('btn-submit'),
+        getEl = el => document.querySelector(el)
+
+    function handleUpload() {
+        const inputEl = getEl('#demo5Progress'),
+            progressEl = getEl('.progress-status'),
+            files = inputEl.files
+        progressEl.style.cssText = 'width: 0'
+        if (!files.length) {
+            return alert('请选择文件')
+        }
+        const formatData = new FormData()
+        for (let i = 0; i < files.length; i++) {
+            formatData.append('demo5Progress', files[i])
+        }
+        const xhr = new XMLHttpRequest()
+        xhr.open('POST', 'http://localhost:8500', true)
+        xhr.onreadystatechange = function () {
+            if(xhr.readyState == 4 && xhr.status === 200) {
+                const obj = JSON.parse(xhr.responseText);
+                console.log(obj);
+            }
+        }
+        /* 监听上传进度 */
+        xhr.onprogress = handleProgress
+        xhr.upload.onprogress = handleProgress
+
+        function handleProgress(event) {
+            console.log(event, 'event');
+            const {
+                lengthComputable,
+                loaded,
+                total
+            } = event
+            if(lengthComputable) {
+                const progress = `${(loaded / total * 100).toFixed(2)}`
+                progressEl.style.cssText = `width: ${progress}%; background-color: red;`
+                progressEl.innerText = `${progress}%`
+                if(progress > 90) {
+                    progressEl.style.cssText = `background-color: green;`
+                }
+            }
+        }
+        // 注意⚠️"
+        // send一定要写在最下面，否则onprogress只会执行最后一次，也就是100%的时候
+        xhr.send(formatData)
+    }
+    btn.addEventListener('click', handleUpload)
+</script>
+</body>
+</html>
