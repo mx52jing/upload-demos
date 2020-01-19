@@ -11,7 +11,7 @@
 
 - event.total 表示需要上传的文件总共有多少字节
 
-![Alt](../static/images/progress.png#pic_center)
+![Alt](./static/images/progress.png#pic_center)
 
 注意⚠️:
 
