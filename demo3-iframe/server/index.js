@@ -26,15 +26,15 @@ app.use(async ctx => {
     * name就是type为file的input设置的name属性
     */
     try {
-        const {files = {}} = ctx.request
-            /*
-            * 多个文件上传，
-            * demo3File就是一个数组，而不是一个对象
-            * */
-        let {demo3File = []} = files,
+        const { files = {} } = ctx.request
+        /*
+        * 多个文件上传，
+        * demo3File就是一个数组，而不是一个对象
+        * */
+        let { demo3File = [] } = files,
             result = []
         /* 这里要注意一下 如果只上传了一个文件, demo3File就不是一个数组，要兼容一下 */
-        if(!Array.isArray(demo3File)) {
+        if (!Array.isArray(demo3File)) {
             demo3File = [demo3File]
         }
         !!demo3File && demo3File.forEach(item => {
@@ -43,7 +43,7 @@ app.use(async ctx => {
              * name 文件名称 例如 a.png
              * size 文件大小
             */
-            const {name, path: filePath, size} = item
+            const { name, path: filePath, size } = item
             if (size > 0 && filePath) {
                 const suffix = path.extname(name),
                     newPath = `${filePath}${suffix}`
@@ -63,6 +63,10 @@ app.use(async ctx => {
 })
 
 app.listen(port, () => {
-    console.log(`Servering is Running at http://localhost:${port}`);
+    const url = `http://localhost:${port}`
+    console.log(
+        `Servering is Running at ${url}\n`,
+        `浏览器中输入【${url}/html/index.html】查看效果`
+    );
 })
 

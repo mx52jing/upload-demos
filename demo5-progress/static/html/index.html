@@ -46,12 +46,12 @@
         xhr.upload.onprogress = handleProgress
 
         function handleProgress(event) {
-            console.log(event, 'event');
             const {
                 lengthComputable,
                 loaded,
                 total
             } = event
+            console.log(loaded, total, '----------------');
             if(lengthComputable) {
                 const progress = `${(loaded / total * 100).toFixed(2)}`
                 progressEl.style.cssText = `width: ${progress}%; background-color: red;`

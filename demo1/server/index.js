@@ -12,7 +12,7 @@ app.use(koaBody({
         //设置文件的默认保存目录，不设置则保存在系统临时目录下  os
         uploadDir: path.resolve(__dirname, '../static/uploads')
     },
-    multipart: true // 支持文件上传
+    multipart: true //支持文件上传
 }))
 
 //开启静态文件访问
@@ -26,14 +26,14 @@ app.use(async ctx => {
     * name就是type为file的input设置的name属性
     */
     try {
-        const {files = {}} = ctx.request,
-            {demo1File = {}} = files,
+        const { files = {} } = ctx.request,
+            { demo1File = {} } = files,
             /*
             * path 路径
             * name 文件名称 例如 a.png
             * size 文件大小
             * */
-            {path: filePath, name, size} = demo1File
+            { path: filePath, name, size } = demo1File
         if (size > 0 && filePath) {
             const suffix = path.extname(name),
                 newPath = `${filePath}${suffix}`
@@ -52,6 +52,10 @@ app.use(async ctx => {
 })
 
 app.listen(port, () => {
-    console.log(`Servering is Running at http://localhost:${port}`);
+    const url = `http://localhost:${port}`
+    console.log(
+        `Servering is Running at ${url}\n`,
+        `浏览器中输入【${url}/html/index.html】查看效果`
+    );
 })
 
