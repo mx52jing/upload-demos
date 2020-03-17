@@ -51,11 +51,11 @@
                 loaded,
                 total
             } = event
-            console.log(loaded, total, '----------------');
             if(lengthComputable) {
                 const progress = `${(loaded / total * 100).toFixed(2)}`
                 progressEl.style.cssText = `width: ${progress}%; background-color: red;`
                 progressEl.innerText = `${progress}%`
+                console.log(progress, '===============');
                 if(progress > 90) {
                     progressEl.style.cssText = `background-color: green;`
                 }
