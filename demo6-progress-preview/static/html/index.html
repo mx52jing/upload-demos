@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>文件上传 显示上传进度 + 预览</title>
+    <style>
+        #demo6ProgressPreview {
+            display: none;
+        }
+        
+        .upload-label {
+            display: block;
+        }
+        
+        .upload-select {
+            font-size: 12px;
+            width: 80px;
+            height: 80px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: 1px solid #999999;
+        }
+        
+        .preview-wrapper {
+            display: flex;
+            flex-wrap: wrap;
+        }
+        
+        .preview-item {
+            margin: 10px;
+            border: 1px solid #999999;
+        }
+        
+        .preview-item img {
+            display: block;
+            width: 188px;
+            height: 188px;
+        }
+        
+        .preview-abort {
+            display: flex;
+        }
+        
+        .preview-abort span {
+            flex: 1;
+        }
+    </style>
+</head>
+<body>
+<div class="upload-wrapper">
+    <label class="upload-label">
+        <div class="upload-select">点击选择图片</div>
+        <input id="demo6ProgressPreview" type="file" multiple>
+    </label>
+    <div class="preview-wrapper"></div>
+    <button id="btn-submit">提交</button>
+</div>
+<script>
+    const getEl = el => document.querySelector(el),
+        createEl = nodeType => document.createElement(nodeType)
+    /* 提交按钮 */
+    submitBtn = document.getElementById('btn-submit'),
+        /* 获取预览区域dom */
+        imgPreviewWrapper = getEl('.preview-wrapper'),
+        /* input file */
+        inputFile = getEl('#demo6ProgressPreview'),
+        /* 最大上传文件数量 */
+        maxUploadCount = 6,
+        /* 上传文件数组 */
+        uploadAry = []
+    /* 监听input change事件函数 */
+    const handleInputChange = () => {
+        const files = inputFile.files,
+            { length: filesLength } = files
+        if (
+            filesLength > maxUploadCount ||
+            filesLength + uploadAry.length > maxUploadCount ||
+            uploadAry.length === maxUploadCount
+        ) {
+            return alert(`最多只能上传${maxUploadCount}张图片`)
+        }
+        for (let i = 0; i < filesLength; i++) {
+            /* 创建单个预览图片容器 */
+            const previewItem = createEl('div'),
+                /* 图片 */
+                imgWrapper = createEl('img'),
+                /* 进度条和中止按钮 */
+                progressWrap = createEl('div')
+            progressWrap.setAttribute('class', 'preview-abort')
+            previewItem.setAttribute('class', 'preview-item')
+            imgWrapper.src = URL.createObjectURL(files[i])
+            /*
+            * 每次调用 createObjectURL() 方法时，都会创建一个新的 URL 对象
+            * 当不再需要这些 URL 对象时，每个对象必须通过调用 URL.revokeObjectURL() 方法来释放
+            * */
+            imgWrapper.onload = () => {
+                URL.revokeObjectURL(files[i])
+            }
+            progressWrap.innerHTML = `
+                <span class="item-progress"></span>
+                <button>Abort</button>
+            `
+            previewItem.appendChild(imgWrapper)
+            previewItem.appendChild(progressWrap)
+            imgPreviewWrapper.appendChild(previewItem)
+            uploadAry.push({
+                file: files[i],
+                progressWrap
+            })
+        }
+    }
+    inputFile.addEventListener('change', handleInputChange)
+
+    /* 处理每个*/
+    const handleUpload = ({ file, progressWrap }) => {
+        console.log(file, progressWrap);
+    }
+    /* 上传事件处理函数 */
+    const handleSubmit = () => {
+        if (!uploadAry.length) {
+            return alert('请选择文件')
+        }
+        uploadAry.forEach(item => handleUpload(item))
+    }
+    submitBtn.addEventListener('click', handleSubmit)
+</script>
+</body>
+</html>
