@@ -11,7 +11,7 @@
         .upload-label {
             display: block;
         }
-        
+        .upload-label,
         .upload-select {
             font-size: 12px;
             width: 80px;
@@ -36,14 +36,6 @@
             display: block;
             width: 188px;
             height: 188px;
-        }
-        
-        .preview-abort {
-            display: flex;
-        }
-        
-        .preview-abort span {
-            flex: 1;
         }
     </style>
 </head>
@@ -98,8 +90,8 @@
                 URL.revokeObjectURL(files[i])
             }
             progressWrap.innerHTML = `
-                <span class="item-progress"></span>
-                <button>Abort</button>
+                <div class="item-progress"></div>
+                <button class="btn-abort">Abort</button>
             `
             previewItem.appendChild(imgWrapper)
             previewItem.appendChild(progressWrap)
@@ -112,16 +104,57 @@
     }
     inputFile.addEventListener('change', handleInputChange)
 
-    /* 处理每个*/
-    const handleUpload = ({ file, progressWrap }) => {
-        console.log(file, progressWrap);
+    /* 处理每个上传 */
+    const handleUpload = ({ file, progressWrap }, index) => {
+        /* 获取中止上传按钮 */
+        const abortBtn = progressWrap.querySelector('.btn-abort'),
+            /* 获取进度条容器 */
+            itemProgress = progressWrap.querySelector('.item-progress')
+        const xhr = new XMLHttpRequest
+        xhr.open('POST', 'http://localhost:8600', true)
+        xhr.onreadystatechange = () => {
+            if(xhr.readyState === 4 && xhr.uploaded) {
+				const obj = JSON.parse(xhr.responseText);   //返回值
+				console.log(obj);
+            }
+        }
+        const formData = new FormData()
+        formData.append('demo6ProgressPreview', file)
+        /* 监听上传进度函数 */
+        const handleProgress = event => {
+            const {
+                lengthComputable, //上传进度改变
+                loaded, // 加载的字节数
+                total // 总共字节数
+            } = event
+            if (lengthComputable) {
+                const progress = (loaded / total * 100).toFixed(2)
+                itemProgress.textContent = `${progress}%`
+                itemProgress.style.cssText = `width: ${progress}%; background-color: red`
+                if(progress > 99) {
+                    itemProgress.style.cssText = `width: ${progress}%; background-color: green`
+                }
+                if(progress >= 100) {
+                	/* 给xhr 添加自定义属性，表示上传成功 */
+                	xhr.uploaded = true
+                }
+            }
+        }
+        xhr.upload.onprogress = handleProgress
+        /* 终止上传事件 */
+        const handleAbort = () => {
+        	/* 终止上传后 xhr.readyState 会等于 4*/
+            xhr.abort()
+        }
+        abortBtn.addEventListener('click', handleAbort)
+        xhr.send(formData)
     }
     /* 上传事件处理函数 */
     const handleSubmit = () => {
         if (!uploadAry.length) {
             return alert('请选择文件')
         }
-        uploadAry.forEach(item => handleUpload(item))
+        uploadAry.forEach((item, index) => handleUpload(item, index))
     }
     submitBtn.addEventListener('click', handleSubmit)
 </script>
