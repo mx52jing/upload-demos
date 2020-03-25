@@ -29,15 +29,15 @@ app.use(async ctx => {
         const { files = {} } = ctx.request
         /*
         * 多个文件上传，
-        * demo6ProgressPreview就是一个数组，而不是一个对象
+        * demo7Drag就是一个数组，而不是一个对象
         * */
-        let { demo6ProgressPreview = [] } = files,
+        let { demo7Drag = [] } = files,
             result = []
-        /* 这里要注意一下 如果只上传了一个文件, demo6ProgressPreview就不是一个数组，要兼容一下 */
-        if (!Array.isArray(demo6ProgressPreview)) {
-            demo6ProgressPreview = [demo6ProgressPreview]
+        /* 这里要注意一下 如果只上传了一个文件, demo7Drag就不是一个数组，要兼容一下 */
+        if (!Array.isArray(demo7Drag)) {
+            demo7Drag = [demo7Drag]
         }
-        !!demo6ProgressPreview && demo6ProgressPreview.forEach(item => {
+        !!demo7Drag && demo7Drag.forEach(item => {
             /*
              * path 路径
              * name 文件名称 例如 a.png
