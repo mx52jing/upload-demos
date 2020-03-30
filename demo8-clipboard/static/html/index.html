@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>剪贴板上传</title>
+    <style>
+        .clipboard-box {
+            width: 388px;
+            height: 288px;
+            border: 1px solid #ddd;
+            text-align: center;
+            line-height: 288px;
+        }
+    </style>
+</head>
+<body>
+<div class="clipboard-box" contenteditable>
+    图片粘贴到这里上传
+</div>
+<button id="btn-submit">上传</button>
+
+<script>
+	const getEl = el => document.querySelector(el),
+		/* 剪贴板盒子 */
+		clipboardBox = getEl('.clipboard-box'),
+		/* 提交按钮 */
+		submitBtn = getEl('#btn-submit')
+
+	const handlePaste = event => {
+        const clipboardData = event.clipboardData || window.clipboardData
+		console.log(clipboardData);
+	}
+
+	clipboardBox.addEventListener('paste', handlePaste)
+</script>
+</body>
+</html>
